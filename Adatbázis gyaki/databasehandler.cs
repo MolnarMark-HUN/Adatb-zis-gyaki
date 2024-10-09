@@ -32,11 +32,12 @@ namespace Adatbázis_gyaki
                 string query = "SELECT * FROM kolbasz";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 MySqlDataReader read = command.ExecuteReader();
+                datastore.kolbaszok.Clear();
                 while (read.Read())
                 {
                     int id = read.GetInt32(read.GetOrdinal("id"));
                     string fajta = read.GetString(read.GetOrdinal("fajta"));
-                    int hossz = read.GetInt32(read.GetOrdinal("hossz"));
+                    int hossz = read.GetInt32(read.GetOrdinal("hossza"));
                     datastore data = new datastore();
                     data.id = id;
                     data.fajta = fajta;
@@ -64,6 +65,7 @@ namespace Adatbázis_gyaki
                 command.ExecuteNonQuery();
                 command.Dispose();
                 MessageBox.Show("Gotchu bro");
+                connection.Close();
             }
             catch (Exception e)
             {
@@ -85,6 +87,7 @@ namespace Adatbázis_gyaki
                 command.ExecuteNonQuery();
                 command.Dispose();
                 MessageBox.Show("Kitoroltel mindent te gorcs");
+                connection.Close();
             }
             catch (Exception e)
             {
@@ -92,17 +95,18 @@ namespace Adatbázis_gyaki
                 MessageBox.Show(e.Message, "Error");
             }
         }
-        public void add()
+        public void add(datastore onedata)
         {
             datastore data = new datastore();
             try
             {
                 connection.Open();
-                string query = $"INSERT INTO kolbasz (fajta,hosz) values ('{data.fajta}','{data.hossz}')";
+                string query = $"INSERT INTO kolbasz (fajta,hossza) values ('{onedata.fajta}','{onedata.hossz}')";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.ExecuteNonQuery();
                 command.Dispose();
                 MessageBox.Show("Siker az addolásban");
+                connection.Close();
             }
             catch (Exception e)
             {
